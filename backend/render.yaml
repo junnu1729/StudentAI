@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: smart-study-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn run:app
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: UPLOAD_FOLDER
+        value: uploads
+      - key: DATABASE_URL
+        value: sqlite:///study_assistant.db

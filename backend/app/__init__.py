@@ -1,0 +1,43 @@
+from flask import Flask
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+db = SQLAlchemy()
+
+def create_app():
+    app = Flask(__name__)
+
+    # Config
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///study_assistant.db')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER', 'uploads')
+    app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', str(16 * 1024 * 1024)))
+
+    # Ensure upload directories exist
+    os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'notes'), exist_ok=True)
+    os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'papers'), exist_ok=True)
+
+    # Init extensions
+    db.init_app(app)
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+    # Register blueprints
+    from app.routes.notes import notes_bp
+    from app.routes.papers import papers_bp
+    from app.routes.chat import chat_bp
+    from app.routes.quiz import quiz_bp
+
+    app.register_blueprint(notes_bp, url_prefix='/api/notes')
+    app.register_blueprint(papers_bp, url_prefix='/api/papers')
+    app.register_blueprint(chat_bp, url_prefix='/api/chat')
+    app.register_blueprint(quiz_bp, url_prefix='/api/quiz')
+
+    with app.app_context():
+        db.create_all()
+
+    return app
