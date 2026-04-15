@@ -6,8 +6,10 @@ import Upload from './pages/Upload'
 import Chat from './pages/Chat'
 import Dashboard from './pages/Dashboard'
 import Papers from './pages/Papers'
+import useKeepAlive from './hooks/useKeepAlive'
 
 export default function App() {
+  useKeepAlive()
   const [darkMode, setDarkMode] = useState(() => {
     try { return localStorage.getItem('darkMode') === 'true' } catch { return false }
   })

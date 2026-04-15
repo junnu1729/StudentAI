@@ -1,9 +1,8 @@
 import axios from 'axios'
 
-// Always use /api — Vercel proxies it to Render via vercel.json rewrites
 const api = axios.create({
   baseURL: '/api',
-  timeout: 60000
+  timeout: 120000  // 2 min — Render free tier needs time to wake up
 })
 
 // Notes

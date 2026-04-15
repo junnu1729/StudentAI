@@ -37,7 +37,7 @@ export default function Upload() {
       setFile(null); setSubject('')
       fetchNotes()
     } catch (err) {
-      setError(err.response?.data?.error || 'Upload failed')
+      setError(err.response?.data?.error || err.response?.data || err.message || 'Upload failed')
     }
     setUploading(false)
   }
