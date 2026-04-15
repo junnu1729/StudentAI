@@ -19,8 +19,12 @@ export default function Upload() {
     setLoading(true)
     try {
       const res = await listNotes()
-      setNotes(Array.isArray(res.data) ? res.data : [])
-    } catch { setNotes([]) }
+      const data = Array.isArray(res.data) ? res.data : []
+      setNotes(data)
+    } catch (err) {
+      console.error('fetchNotes error:', err)
+      setNotes([])
+    }
     setLoading(false)
   }
 
