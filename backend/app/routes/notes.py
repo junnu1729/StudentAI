@@ -20,8 +20,13 @@ def allowed_file(filename):
 @notes_bp.route('/', methods=['GET'])
 def list_notes():
     """List all uploaded notes."""
-    notes = Note.query.order_by(Note.created_at.desc()).all()
-    return jsonify([n.to_dict() for n in notes])
+    try:
+        notes = Note.query.order_by(Note.created_at.desc()).all()
+        return jsonify([n.to_dict() for n in notes])
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
 
 
 @notes_bp.route('/upload', methods=['POST'])

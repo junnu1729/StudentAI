@@ -1,25 +1,29 @@
-"""PDF text extraction service"""
+"""PDF text extraction service - memory efficient for free tier hosting"""
 import PyPDF2
 import os
 
 
-def extract_text_from_pdf(file_path: str) -> str:
-    """Extract all text from a PDF file."""
+def extract_text_from_pdf(file_path: str, max_pages: int = 50) -> str:
+    """Extract text from PDF - limit pages to avoid memory issues on free tier."""
     text = ""
     try:
         with open(file_path, 'rb') as f:
             reader = PyPDF2.PdfReader(f)
-            for page in reader.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text += page_text + "\n"
+            total = len(reader.pages)
+            pages_to_read = min(total, max_pages)
+            for i in range(pages_to_read):
+                try:
+                    page_text = reader.pages[i].extract_text()
+                    if page_text:
+                        text += page_text + "\n"
+                except Exception:
+                    continue  # skip problematic pages
     except Exception as e:
-        raise ValueError(f"Failed to extract text from PDF: {str(e)}")
+        raise ValueError("Failed to extract text from PDF: {}".format(str(e)))
     return text.strip()
 
 
 def get_page_count(file_path: str) -> int:
-    """Return number of pages in a PDF."""
     try:
         with open(file_path, 'rb') as f:
             reader = PyPDF2.PdfReader(f)
@@ -28,8 +32,8 @@ def get_page_count(file_path: str) -> int:
         return 0
 
 
-def chunk_text(text: str, chunk_size: int = 1000, overlap: int = 200) -> list:
-    """Split text into overlapping chunks for vector search."""
+def chunk_text(text: str, chunk_size: int = 500, overlap: int = 100) -> list:
+    """Split text into smaller chunks - reduced size for free tier memory."""
     chunks = []
     start = 0
     while start < len(text):
@@ -38,4 +42,4 @@ def chunk_text(text: str, chunk_size: int = 1000, overlap: int = 200) -> list:
         if chunk.strip():
             chunks.append(chunk)
         start += chunk_size - overlap
-    return chunks
+    return chunks[:50]  # max 50 chunks to limit memory

@@ -7,7 +7,7 @@ const api = axios.create({
 
 // Notes
 export const uploadNote = (formData) => api.post('/notes/upload', formData)
-export const listNotes = () => api.get('/notes/', { headers: { 'Cache-Control': 'no-cache' } })
+export const listNotes = () => api.get('/notes/', { params: { _t: Date.now() } })
 export const getNote = (id) => api.get(`/notes/${id}`)
 export const summarizeNote = (id) => api.post(`/notes/${id}/summarize`)
 export const deleteNote = (id) => api.delete(`/notes/${id}`)
@@ -15,7 +15,7 @@ export const downloadNote = (id) => `/api/notes/${id}/download`
 
 // Papers
 export const uploadPaper = (formData) => api.post('/papers/upload', formData)
-export const listPapers = (params) => api.get('/papers/', { params })
+export const listPapers = (params) => api.get('/papers/', { params: { ...params, _t: Date.now() } })
 export const getPaper = (id) => api.get(`/papers/${id}`)
 export const getSubjects = () => api.get('/papers/subjects')
 export const analyzeTrends = (subject) => api.post('/papers/analyze', { subject })
