@@ -9,12 +9,12 @@ import Papers from './pages/Papers'
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('darkMode') === 'true'
+    try { return localStorage.getItem('darkMode') === 'true' } catch { return false }
   })
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode)
-    localStorage.setItem('darkMode', darkMode)
+    try { localStorage.setItem('darkMode', darkMode) } catch {}
   }, [darkMode])
 
   return (

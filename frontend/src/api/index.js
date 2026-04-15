@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+const BASE = import.meta.env.VITE_API_URL || ''
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api',
+  baseURL: `${BASE}/api`,
   timeout: 60000
 })
 
@@ -11,7 +13,7 @@ export const listNotes = () => api.get('/notes/')
 export const getNote = (id) => api.get(`/notes/${id}`)
 export const summarizeNote = (id) => api.post(`/notes/${id}/summarize`)
 export const deleteNote = (id) => api.delete(`/notes/${id}`)
-export const downloadNote = (id) => `/api/notes/${id}/download`
+export const downloadNote = (id) => `${BASE}/api/notes/${id}/download`
 
 // Papers
 export const uploadPaper = (formData) => api.post('/papers/upload', formData)
@@ -20,7 +22,7 @@ export const getPaper = (id) => api.get(`/papers/${id}`)
 export const getSubjects = () => api.get('/papers/subjects')
 export const analyzeTrends = (subject) => api.post('/papers/analyze', { subject })
 export const searchPapers = (q) => api.get('/papers/search', { params: { q } })
-export const downloadPaper = (id) => `/api/papers/${id}/download`
+export const downloadPaper = (id) => `${BASE}/api/papers/${id}/download`
 export const deletePaper = (id) => api.delete(`/papers/${id}`)
 
 // Chat

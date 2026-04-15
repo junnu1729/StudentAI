@@ -18,8 +18,8 @@ export default function Dashboard() {
   const [numQ, setNumQ] = useState(5)
 
   useEffect(() => {
-    listNotes().then(r => setNotes(r.data)).catch(() => {})
-    listQuizzes().then(r => setPastQuizzes(r.data)).catch(() => {})
+    listNotes().then(r => setNotes(Array.isArray(r.data) ? r.data : [])).catch(() => {})
+    listQuizzes().then(r => setPastQuizzes(Array.isArray(r.data) ? r.data : [])).catch(() => {})
   }, [])
 
   async function handleSummarize() {

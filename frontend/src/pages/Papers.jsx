@@ -27,10 +27,10 @@ export default function Papers() {
     setLoading(true)
     try {
       const [papersRes, subjectsRes] = await Promise.all([listPapers({}), getSubjects()])
-      setPapers(papersRes.data)
-      setSubjects(subjectsRes.data.subjects)
-      setYears(subjectsRes.data.years)
-    } catch { /* silent */ }
+      setPapers(Array.isArray(papersRes.data) ? papersRes.data : [])
+      setSubjects(Array.isArray(subjectsRes.data?.subjects) ? subjectsRes.data.subjects : [])
+      setYears(Array.isArray(subjectsRes.data?.years) ? subjectsRes.data.years : [])
+    } catch { setPapers([]); setSubjects([]); setYears([]) }
     setLoading(false)
   }
 
@@ -38,8 +38,8 @@ export default function Papers() {
     setLoading(true)
     try {
       const res = await listPapers({ subject: filters.subject, year: filters.year || undefined, exam_type: filters.exam_type })
-      setPapers(res.data)
-    } catch { /* silent */ }
+      setPapers(Array.isArray(res.data) ? res.data : [])
+    } catch { setPapers([]) }
     setLoading(false)
   }
 
@@ -49,8 +49,8 @@ export default function Papers() {
     setLoading(true)
     try {
       const res = await searchPapers(searchQ)
-      setPapers(res.data)
-    } catch { /* silent */ }
+      setPapers(Array.isArray(res.data) ? res.data : [])
+    } catch { setPapers([]) }
     setLoading(false)
   }
 

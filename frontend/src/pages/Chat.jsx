@@ -15,8 +15,8 @@ export default function Chat() {
   const bottomRef = useRef(null)
 
   useEffect(() => {
-    listNotes().then(r => setNotes(r.data)).catch(() => {})
-    listSessions().then(r => setSessions(r.data)).catch(() => {})
+    listNotes().then(r => setNotes(Array.isArray(r.data) ? r.data : [])).catch(() => {})
+    listSessions().then(r => setSessions(Array.isArray(r.data) ? r.data : [])).catch(() => {})
   }, [])
 
   useEffect(() => {

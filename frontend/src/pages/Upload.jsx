@@ -19,8 +19,8 @@ export default function Upload() {
     setLoading(true)
     try {
       const res = await listNotes()
-      setNotes(res.data)
-    } catch { /* silent */ }
+      setNotes(Array.isArray(res.data) ? res.data : [])
+    } catch { setNotes([]) }
     setLoading(false)
   }
 
