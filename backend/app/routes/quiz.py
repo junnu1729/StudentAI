@@ -81,6 +81,7 @@ def submit_quiz(quiz_id):
 
 
 @quiz_bp.route('/', methods=['GET'])
+@quiz_bp.route('', methods=['GET'])
 def list_quizzes():
     quizzes = Quiz.query.order_by(Quiz.created_at.desc()).limit(20).all()
     return jsonify([q.to_dict() for q in quizzes])

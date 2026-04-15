@@ -18,6 +18,7 @@ def allowed_file(filename):
 
 
 @notes_bp.route('/', methods=['GET'])
+@notes_bp.route('', methods=['GET'])
 def list_notes():
     """List all uploaded notes."""
     try:

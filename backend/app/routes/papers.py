@@ -13,6 +13,7 @@ papers_bp = Blueprint('papers', __name__)
 
 
 @papers_bp.route('/', methods=['GET'])
+@papers_bp.route('', methods=['GET'])
 def list_papers():
     """List papers with optional subject/year filters."""
     subject = request.args.get('subject')
