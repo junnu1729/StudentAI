@@ -20,6 +20,7 @@ export default function Upload() {
     try {
       const res = await listNotes()
       const data = Array.isArray(res.data) ? res.data : []
+      console.log('Notes fetched:', data)
       setNotes(data)
     } catch (err) {
       console.error('fetchNotes error:', err)
@@ -31,6 +32,7 @@ export default function Upload() {
   async function handleUpload(e) {
     e.preventDefault()
     if (!file) return setError('Please select a file')
+    if (file.size > 5 * 1024 * 1024) return setError('File too large. Max 5MB on free hosting.')
     setError(''); setSuccess(''); setUploading(true)
     const fd = new FormData()
     fd.append('file', file)
@@ -39,7 +41,8 @@ export default function Upload() {
       await uploadNote(fd)
       setSuccess('Note uploaded and indexed successfully!')
       setFile(null); setSubject('')
-      await fetchNotes()
+      // Small delay then fetch to ensure DB is committed
+      setTimeout(() => fetchNotes(), 1000)
     } catch (err) {
       setError(err.response?.data?.error || err.response?.data || err.message || 'Upload failed')
     }
