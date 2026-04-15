@@ -78,17 +78,8 @@ def upload_paper():
         db.session.add(paper)
         db.session.commit()
 
-        # AI question extraction (non-blocking)
+        # Skip AI during upload — called on-demand only
         if text:
-            try:
-                from app.services.ai_service import extract_important_questions
-                questions = extract_important_questions(text)
-                paper.important_questions = json.dumps(questions)
-                db.session.commit()
-            except Exception as e:
-                print("AI extraction skipped:", str(e))
-
-            # Vector indexing (non-blocking)
             try:
                 chunks = chunk_text(text)
                 add_document("paper_{}".format(paper.id), chunks, {'type': 'paper'})

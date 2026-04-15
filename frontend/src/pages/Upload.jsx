@@ -35,7 +35,7 @@ export default function Upload() {
       await uploadNote(fd)
       setSuccess('Note uploaded and indexed successfully!')
       setFile(null); setSubject('')
-      fetchNotes()
+      await fetchNotes()
     } catch (err) {
       setError(err.response?.data?.error || err.response?.data || err.message || 'Upload failed')
     }

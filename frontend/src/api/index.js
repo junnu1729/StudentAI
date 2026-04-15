@@ -7,7 +7,7 @@ const api = axios.create({
 
 // Notes
 export const uploadNote = (formData) => api.post('/notes/upload', formData)
-export const listNotes = () => api.get('/notes/')
+export const listNotes = () => api.get('/notes/', { headers: { 'Cache-Control': 'no-cache' } })
 export const getNote = (id) => api.get(`/notes/${id}`)
 export const summarizeNote = (id) => api.post(`/notes/${id}/summarize`)
 export const deleteNote = (id) => api.delete(`/notes/${id}`)
